@@ -1,0 +1,5 @@
+flowchart LR
+  TransactionService --> Statement
+  Statement --> PublicPage
+  Admin -->|Confirm fraud| Statement
+  Manager -->|Export| Statement

@@ -1,0 +1,7 @@
+flowchart LR
+  Manager -->|Create| ProjectService
+  ProjectService -->|Pending| Admin
+  Admin -->|Approve/Reject| ProjectService
+  Manager -->|Edit| ProjectService
+  ProjectService --> History[Edit History]
+  ProjectService --> Public[Public Project Page]

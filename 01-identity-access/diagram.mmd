@@ -1,0 +1,6 @@
+flowchart LR
+  Guest -->|Register| Auth
+  Guest -->|Login| Auth
+  Auth --> OTP[OTP Verification]
+  Auth --> Tokens[JWT Access/Refresh]
+  Tokens --> API[Protected APIs]

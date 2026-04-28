@@ -1,0 +1,19 @@
+flowchart TB
+  User[Volunteer] -->|Browse/Join/Donate| App
+  Org[Manager] -->|Create/Manage Projects| App
+  Admin -->|Review/Moderate| App
+
+  App --> Auth[Identity & Access]
+  App --> Project[Project Lifecycle]
+  App --> Participation[Participation]
+  App --> Donate[Donations & Payments]
+  App --> Updates[Progress Updates]
+  App --> Disbursement[Disbursement]
+  App --> Reports[Reporting & Complaints]
+  App --> Noti[Notifications]
+
+  Donate --> Statement[Statement Transparency]
+  Donate --> AI[Fraud AI]
+  AI --> Admin
+  Disbursement --> Admin
+  Reports --> Admin

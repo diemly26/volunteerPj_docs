@@ -1,0 +1,7 @@
+flowchart TB
+  TransactionService --> Features[Feature Snapshot]
+  Features --> Isolation[Isolation Forest]
+  Isolation --> Decision
+  Decision -->|SUSPICIOUS| FlaggedQueue
+  Admin -->|Review| Labeling
+  Labeling --> FraudModel[Fraud Classifier]

@@ -1,0 +1,6 @@
+flowchart TB
+  User -->|Create session| DonationService
+  DonationService --> VietQR
+  Bank --> SePay --> Webhook
+  Webhook -->|HMAC + Idempotency| TransactionService
+  TransactionService --> FraudAI
