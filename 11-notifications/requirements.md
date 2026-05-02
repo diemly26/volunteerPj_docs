@@ -4,7 +4,7 @@
 
 | ID | Role | Story |
 |----|------|-------|
-| US-01 | User | Tôi muốn nhận thông báo trong app cho các sự kiện quan trọng. |
+| US-01 | User | Tôi muốn nhận thông báo trong web cho các sự kiện quan trọng. |
 | US-02 | User | Tôi muốn nhận email với cảnh báo quá hạn. |
 | US-03 | Admin | Tôi muốn nhận thông báo khi có việc cần duyệt. |
 
