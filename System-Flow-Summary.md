@@ -1,231 +1,220 @@
-# Tóm tắt hệ thống: Luồng nghiệp vụ Web và AI
+# Tóm tắt hệ thống: Mục tiêu, quy trình nghiệp vụ Web và AI
 
-## 1) Mục đích hệ thống
+## 1) Hệ thống này phục vụ mục đích gì?
 
-Hệ thống được xây dựng để phục vụ 3 mục tiêu chính:
+Hệ thống được xây dựng để giải quyết bài toán minh bạch trong hoạt động cộng đồng:
 
-- Kết nối tổ chức cộng đồng với người tham gia và người ủng hộ.
-- Đảm bảo minh bạch dòng tiền từ lúc nhận đóng góp đến lúc giải ngân.
-- Giảm rủi ro gian lận bằng cơ chế AI phát hiện sớm và kiểm duyệt bởi quản trị viên.
+- Giúp tổ chức cộng đồng tạo và vận hành dự án thiện nguyện một cách có kiểm soát.
+- Giúp người ủng hộ theo dõi được dòng tiền đóng góp và kết quả sử dụng tiền.
+- Giảm rủi ro gian lận nhờ cơ chế phát hiện sớm bằng AI và bước xác minh của quản trị viên.
+
+Nói đơn giản: hệ thống đảm bảo “gây quỹ đúng – dùng tiền đúng – công khai rõ ràng”.
 
 
-## 2) Vai trò người dùng
+## 2) Các vai trò chính trong hệ thống
 
 - **Người tham gia/ủng hộ (Volunteer):** xem dự án, tham gia hoạt động, ủng hộ tài chính, gửi phản ánh.
-- **Người quản lý tổ chức (Manager):** tạo và vận hành dự án, cập nhật tiến độ, nộp báo cáo giải ngân.
-- **Quản trị viên (Admin):** duyệt hồ sơ tổ chức, duyệt dự án, xử lý giao dịch bất thường, kiểm soát tuân thủ.
+- **Người quản lý tổ chức (Manager):** tạo dự án, cập nhật tiến độ, quản lý hoạt động dự án, nộp báo cáo giải ngân.
+- **Quản trị viên (Admin):** kiểm tra tính hợp lệ của tổ chức và dự án, rà soát cảnh báo rủi ro, xác nhận kết quả cuối cùng.
 
 
 ## 3) Luồng nghiệp vụ tổng thể
 
 ```mermaid
 flowchart LR
-  A[Tạo tài khoản và xác minh] --> B[Tổ chức nộp hồ sơ]
+  A[Tạo tài khoản và xác minh] --> B[Nộp hồ sơ tổ chức]
   B --> C[Admin xét duyệt hồ sơ]
   C --> D[Tạo dự án]
   D --> E[Admin xét duyệt dự án]
   E --> F[Dự án hoạt động]
   F --> G[Người dùng tham gia hoặc ủng hộ]
-  G --> H[Sao kê công khai]
-  H --> I[Nộp báo cáo giải ngân]
-  I --> J[Admin xác nhận kết quả]
+  G --> H[Hệ thống ghi nhận giao dịch và cập nhật sao kê]
+  H --> I{Đã đạt mục tiêu huy động hoặc hết thời hạn?}
+  I -- Chưa --> G
+  I -- Rồi --> J[Ngừng nhận ủng hộ và chuyển sang giai đoạn giải ngân]
+  J --> K[Tổ chức nộp báo cáo giải ngân]
+  K --> L[Công khai khoản chi và kết quả hoạt động]
+  L --> M[Admin xác nhận hoàn tất]
 
-  G --> K[AI phát hiện giao dịch bất thường]
-  K --> L[Admin rà soát cảnh báo]
-  L --> H
-```
-
-Diễn giải ngắn:
-
-- Luồng web đảm bảo vận hành dự án từ đầu đến cuối theo quy trình rõ ràng.
-- Luồng AI chạy song song với nghiệp vụ quyên góp để cảnh báo rủi ro sớm.
-- Quyết định cuối cùng luôn có bước xác minh của Admin.
-
-
-## 4) Luồng nghiệp vụ Web cốt lõi
-
-## 4.1 Xác thực và phân quyền
-
-- Người dùng đăng ký và xác minh email trước khi sử dụng nghiệp vụ chính.
-- Quyền thao tác được tách theo vai trò (Volunteer, Manager, Admin).
-
-Mục đích:
-
-- Đảm bảo mọi hành động đều gắn với danh tính rõ ràng để truy vết.
-
-
-## 4.2 Onboarding tổ chức
-
-- Tổ chức nộp hồ sơ pháp lý và thông tin tài khoản nhận tiền.
-- Admin kiểm tra hồ sơ và đưa ra kết quả duyệt hoặc từ chối.
-- Hồ sơ quá hạn xử lý được chuyển trạng thái hết hạn nhưng vẫn lưu để phục vụ kiểm tra sau này.
-
-Mục đích:
-
-- Chỉ tổ chức hợp lệ mới có thể tạo và vận hành dự án.
-
-
-## 4.3 Vòng đời dự án
-
-Các trạng thái vận hành chính:
-
-`DRAFT -> PENDING_REVIEW -> APPROVED -> ACTIVE -> DISBURSEMENT_DUE -> COMPLETED`
-
-Trạng thái kiểm soát:
-
-- `REJECTED` khi không đạt yêu cầu duyệt.
-- `SUSPENDED` khi cần dừng khẩn cấp để kiểm soát rủi ro.
-
-Mục đích:
-
-- Đảm bảo mọi dự án đều đi qua bước kiểm tra trước khi mở công khai.
-
-
-## 4.4 Quyên góp và ghi nhận giao dịch
-
-Luồng chính:
-
-1. Người dùng tạo phiên quyên góp có thời hạn.
-2. Hệ thống tạo QR để thanh toán.
-3. Ngân hàng gửi webhook giao dịch về hệ thống.
-4. Hệ thống kiểm tra tính hợp lệ chữ ký và chống gửi lại bản tin trùng.
-5. Hệ thống đối soát giao dịch với phiên quyên góp.
-6. Giao dịch hợp lệ được ghi nhận và chuyển sang bước kiểm tra rủi ro AI.
-
-Mục đích:
-
-- Ghi nhận đúng, không ghi trùng, có thể kiểm tra nguồn gốc từng giao dịch.
-
-
-## 4.5 Sao kê công khai
-
-- Giao dịch bình thường và giao dịch cần theo dõi vẫn được hiển thị công khai (có cảnh báo).
-- Giao dịch đã kết luận gian lận hoặc bị đảo ngược sẽ bị ẩn khỏi sao kê công khai.
-- Manager/Admin có thể xuất sao kê để phục vụ đối chiếu.
-
-Mục đích:
-
-- Minh bạch thông tin tài chính với cộng đồng.
-
-
-## 4.6 Giải ngân và đóng dự án
-
-1. Khi kết thúc giai đoạn nhận tiền, tổ chức phải nộp báo cáo sử dụng tiền.
-2. Admin kiểm tra chứng từ và kết luận.
-3. Khi báo cáo hợp lệ, dự án được hoàn tất và có bản tổng kết công khai.
-
-Mục đích:
-
-- Đóng vòng minh bạch: nhận tiền -> sử dụng tiền -> công khai kết quả.
-
-
-## 5) Nghiệp vụ AI: Mô hình 2 tầng
-
-## 5.1 Mục tiêu AI
-
-- Phát hiện sớm giao dịch bất thường để giảm thất thoát.
-- Hỗ trợ Admin ưu tiên kiểm tra đúng điểm rủi ro.
-
-
-## 5.2 Kiến trúc AI 2 tầng
-
-```mermaid
-flowchart TB
-  A[Nhận giao dịch] --> B[Tạo feature snapshot bất biến]
-  B --> C[Tầng 1: Isolation Forest]
-  B --> D[Tầng 2: Fraud Classifier]
-  C --> E[Hợp nhất điểm rủi ro]
-  D --> E
-  E --> F[Phân loại: bình thường hoặc nghi ngờ]
-  F --> G[Hàng đợi Admin rà soát]
-  G --> H[Gắn nhãn kết luận]
-  H --> I[Cập nhật dữ liệu huấn luyện offline]
+  H --> N[AI kiểm tra rủi ro giao dịch]
+  N --> O[Admin rà soát cảnh báo]
+  O --> H
 ```
 
 
-## 5.3 Cách huấn luyện từng tầng
+## 4) Diễn giải chi tiết luồng Web (dễ hiểu, không cần nền tảng kỹ thuật)
 
-### Tầng 1 — Isolation Forest (Unsupervised)
+## 4.1 Tạo tài khoản và phân vai trò
 
-Bản chất:
+Người dùng cần tạo tài khoản và xác minh email trước khi thực hiện các nghiệp vụ quan trọng.
+Sau khi đăng nhập, quyền thao tác của mỗi người phụ thuộc vào vai trò:
 
-- Học mẫu hành vi giao dịch “khác thường” mà **không cần nhãn gian lận**.
-
-Dữ liệu train:
-
-- Dùng feature snapshot bất biến tại thời điểm giao dịch.
-- Không sử dụng nhãn do Admin gắn để tránh rò rỉ nhãn vào tầng 1.
-
-Đầu ra:
-
-- Điểm bất thường (anomaly score) cho từng giao dịch.
-
-Mục đích tầng 1:
-
-- Bắt các mẫu lạ mới phát sinh, kể cả khi chưa có đủ lịch sử nhãn.
-
-
-### Tầng 2 — Fraud Classifier (Supervised)
-
-Bản chất:
-
-- Học từ dữ liệu đã có nhãn kết luận để dự đoán xác suất gian lận.
-
-Dữ liệu train:
-
-- Feature snapshot + nhãn kết luận từ quy trình rà soát của Admin.
-- Dùng dữ liệu lịch sử đã làm sạch và có kiểm soát chất lượng nhãn.
-
-Đầu ra:
-
-- Xác suất giao dịch có rủi ro gian lận.
-
-Mục đích tầng 2:
-
-- Tăng độ chính xác dựa trên kinh nghiệm xử lý thực tế đã tích lũy.
-
-
-## 5.4 Cơ chế kết hợp 2 tầng
-
-- Hệ thống kết hợp điểm của tầng 1 và tầng 2 để đưa ra mức rủi ro cuối.
-- Giao dịch vượt ngưỡng cảnh báo sẽ vào hàng đợi cho Admin kiểm tra.
-- AI chỉ cảnh báo; kết luận cuối cùng vẫn do con người phê duyệt.
+- Người ủng hộ: thực hiện đóng góp, theo dõi sao kê, gửi phản ánh.
+- Người quản lý tổ chức: vận hành dự án, đăng cập nhật và nộp báo cáo giải ngân.
+- Quản trị viên: kiểm tra, duyệt và giám sát rủi ro.
 
 Ý nghĩa:
 
-- Vừa phát hiện được mẫu lạ mới, vừa tận dụng kiến thức lịch sử đã gắn nhãn.
+- Mọi hành động đều gắn với một tài khoản cụ thể, thuận lợi cho việc kiểm tra và truy vết.
 
 
-## 5.5 Giao dịch như thế nào được coi là bất thường?
+## 4.2 Duyệt tổ chức trước khi cho hoạt động
 
-Trong ngữ cảnh hệ thống này, một giao dịch được xem là **bất thường** khi có một hoặc nhiều dấu hiệu sau:
+Tổ chức phải nộp hồ sơ pháp lý và thông tin nhận tiền.
+Quản trị viên kiểm tra hồ sơ:
 
-### Nhóm 1: Bất thường về số tiền và nhịp giao dịch
+- Nếu đạt yêu cầu: cho phép tổ chức hoạt động.
+- Nếu chưa đạt: yêu cầu bổ sung hoặc từ chối.
 
-- Số tiền cao đột biến so với lịch sử đóng góp thông thường của cùng dự án.
-- Nhiều giao dịch nhỏ lặp lại trong thời gian rất ngắn từ cùng nguồn (mẫu “chia nhỏ giao dịch”).
-- Giao dịch tăng đột ngột theo cụm thời gian bất thường (ví dụ dồn vào khung giờ hiếm khi có đóng góp).
+Ý nghĩa:
 
-### Nhóm 2: Bất thường về nội dung và đối soát
+- Chỉ tổ chức hợp lệ mới có thể kêu gọi đóng góp.
 
-- Nội dung chuyển khoản không khớp hoặc không chứa mã phiên quyên góp.
-- Giao dịch không đối soát được với phiên quyên góp hợp lệ.
-- Chênh lệch đáng kể giữa số tiền kỳ vọng và số tiền thực nhận.
 
-### Nhóm 3: Bất thường về danh tính và hành vi nguồn gửi
+## 4.3 Tạo dự án và công khai lịch sử chỉnh sửa
 
-- Nhiều giao dịch từ các tài khoản có mẫu thông tin rất giống nhau trong thời gian ngắn.
-- Dấu hiệu một nhóm tài khoản phối hợp để tạo “dòng tiền giả” cho cùng dự án.
-- Lịch sử đóng góp của nguồn gửi thay đổi đột ngột, trái ngược hoàn toàn hành vi trước đó.
+Sau khi tổ chức hợp lệ, người quản lý tạo dự án và gửi duyệt.
+Dự án chỉ được mở công khai khi đã qua bước kiểm tra.
 
-### Nhóm 4: Bất thường theo bối cảnh dự án
+**Bổ sung quan trọng (theo yêu cầu):**
 
-- Dự án gần kết thúc nhưng phát sinh đột biến giao dịch không tương xứng truyền thông/thực tế.
-- Dự án đang bị theo dõi rủi ro nhưng vẫn có luồng giao dịch tăng mạnh bất thường.
-- Giao dịch phát sinh trong thời điểm hoặc điều kiện ít hợp lý theo đặc thù dự án.
+- **Lịch sử chỉnh sửa dự án là công khai.**
+- Mọi người dùng đều xem được nội dung đã thay đổi, thời điểm thay đổi và ai thay đổi.
 
-### Lưu ý quan trọng
+Ý nghĩa:
 
-- “Bất thường” không đồng nghĩa ngay với “gian lận”.
-- AI chỉ đưa giao dịch vào diện cần rà soát.
-- Kết luận cuối cùng vẫn do Admin xác minh thủ công dựa trên chứng cứ.
+- Tăng tính minh bạch và tránh thay đổi nội dung dự án một cách khó kiểm soát.
+
+
+## 4.4 Đóng góp và điều kiện tự động ngừng nhận đóng góp
+
+Khi dự án đang hoạt động, người dùng có thể ủng hộ.
+Hệ thống ghi nhận giao dịch từ phía ngân hàng và cập nhật lên sao kê.
+
+**Bổ sung quan trọng (theo yêu cầu):**
+
+Hệ thống sẽ **tự động ngừng nhận đóng góp** trong 2 trường hợp:
+
+1. **Tổng tiền đã đạt ngưỡng huy động** mà dự án đặt ra.
+2. **Hết thời hạn kêu gọi** theo kế hoạch dự án.
+
+Khi một trong hai điều kiện xảy ra:
+
+- Dự án chuyển sang giai đoạn “không nhận thêm đóng góp”.
+- Người dùng vẫn xem được sao kê và thông tin tổng kết, nhưng không thể tạo giao dịch ủng hộ mới cho dự án đó.
+
+Ý nghĩa:
+
+- Đảm bảo đúng cam kết huy động và tránh nhận tiền vượt phạm vi đã công bố.
+
+
+## 4.5 Mỗi giao dịch được định danh riêng cho một người dùng như thế nào?
+
+**Bổ sung quan trọng (theo yêu cầu):**
+
+Để mỗi giao dịch gắn được với đúng người ủng hộ, hệ thống thực hiện theo quy trình sau:
+
+1. Khi người dùng bấm ủng hộ, hệ thống tạo một **phiên quyên góp riêng** cho người đó.
+2. Phiên này có một **mã định danh riêng** (mã phiên) và thời hạn hiệu lực.
+3. Mã phiên được nhúng vào thông tin thanh toán (nội dung chuyển khoản/QR).
+4. Khi ngân hàng gửi xác nhận giao dịch, hệ thống đọc mã phiên để đối chiếu.
+5. Nếu khớp, giao dịch sẽ được gán đúng vào tài khoản người dùng đã tạo phiên quyên góp đó.
+
+Kết quả:
+
+- Mỗi giao dịch có thể truy ngược về người thực hiện.
+- Hạn chế tình trạng giao dịch “không rõ nguồn gốc”.
+- Tăng độ chính xác cho sao kê và phân tích rủi ro.
+
+
+## 4.6 Nộp báo cáo giải ngân và công khai kết quả khi dự án kết thúc
+
+**Bổ sung quan trọng (theo yêu cầu):**
+
+Khi dự án kết thúc huy động, tổ chức bắt buộc nộp báo cáo giải ngân.
+Báo cáo này cần thể hiện rõ:
+
+- Các khoản chi đã thực hiện.
+- Mục đích từng khoản chi.
+- Chứng từ hoặc bằng chứng liên quan.
+- Kết quả hoạt động sau khi sử dụng nguồn tiền.
+
+Sau khi quản trị viên xác nhận:
+
+- Báo cáo được công khai để cộng đồng theo dõi.
+- Dự án chuyển sang trạng thái hoàn tất.
+
+Ý nghĩa:
+
+- Không chỉ minh bạch “đã nhận bao nhiêu”, mà còn minh bạch “đã dùng vào việc gì và tạo kết quả gì”.
+
+
+## 5) Nghiệp vụ AI: giải thích đơn giản cho người không chuyên
+
+## 5.1 AI trong hệ thống làm gì?
+
+AI không thay thế quyết định của con người.
+AI chỉ có nhiệm vụ **phát hiện sớm giao dịch có dấu hiệu rủi ro** để quản trị viên ưu tiên kiểm tra.
+
+## 5.2 AI 2 tầng là gì?
+
+Hệ thống dùng hai lớp kiểm tra:
+
+### Tầng 1: Phát hiện “khác thường”
+
+- Tầng này học hành vi giao dịch thông thường trong hệ thống.
+- Khi gặp một giao dịch có đặc điểm lệch mạnh so với mẫu thường gặp, tầng này đánh dấu đó là bất thường.
+
+Mục tiêu:
+
+- Bắt các mẫu lạ mới xuất hiện, kể cả khi chưa có lịch sử gian lận rõ ràng.
+
+### Tầng 2: Dự đoán khả năng rủi ro
+
+- Tầng này học từ các trường hợp đã được quản trị viên kết luận trước đó.
+- Dựa vào kinh nghiệm quá khứ, tầng này ước lượng mức độ rủi ro của giao dịch mới.
+
+Mục tiêu:
+
+- Tăng độ chính xác dựa trên dữ liệu thực tế đã được xác nhận.
+
+## 5.3 Hai tầng phối hợp ra sao?
+
+- Tầng 1 giúp phát hiện điều lạ.
+- Tầng 2 giúp đánh giá mức độ rủi ro dựa trên kinh nghiệm đã có.
+- Kết quả cuối là một danh sách giao dịch cần quản trị viên kiểm tra.
+
+Lưu ý quan trọng:
+
+- AI chỉ cảnh báo.
+- Quản trị viên mới là người đưa ra kết luận cuối cùng.
+
+
+## 6) Khi nào một giao dịch được xem là bất thường?
+
+Một giao dịch được đưa vào diện cần rà soát khi có một hoặc nhiều dấu hiệu sau:
+
+- Giá trị giao dịch tăng đột biến so với lịch sử đóng góp trước đó.
+- Nhiều giao dịch lặp lại với tần suất bất thường trong thời gian ngắn.
+- Dòng giao dịch xuất hiện theo mẫu giống nhau giữa nhiều tài khoản.
+- Thông tin đối soát giao dịch không khớp với phiên quyên góp đã tạo.
+
+Lưu ý:
+
+- “Bất thường” không có nghĩa chắc chắn là gian lận.
+- Đây là tín hiệu để kiểm tra kỹ hơn, không phải kết luận cuối cùng.
+
+
+## 7) Chỉ số nên theo dõi khi vận hành
+
+- Tỷ lệ tổ chức được duyệt.
+- Tỷ lệ dự án được duyệt.
+- Tỷ lệ giao dịch ghi nhận thành công.
+- Tỷ lệ dự án hoàn tất báo cáo giải ngân đúng hạn.
+- Tỷ lệ cảnh báo AI được xác nhận là rủi ro thực.
+
+
+## 8) Kết luận ngắn
+
+Hệ thống giúp vận hành dự án cộng đồng theo vòng đời rõ ràng, minh bạch dòng tiền và có lớp giám sát rủi ro chủ động.
+Luồng Web đảm bảo tính công khai và trách nhiệm; luồng AI hỗ trợ phát hiện sớm để con người ra quyết định chính xác hơn.

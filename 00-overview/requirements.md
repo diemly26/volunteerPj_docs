@@ -4,14 +4,14 @@
 Nền tảng kết nối người quyên góp/tình nguyện viên với các tổ chức cộng đồng.
 
 Năng lực cốt lõi:
-- quản lý tài khoản + phân quyền
-- onboarding tổ chức và quản trị
-- tạo dự án và quản lý vòng đời dự án
-- quản lý tham gia tình nguyện
-- tiếp nhận quyên góp (bank webhook) và sao kê minh bạch
-- phát hiện gian lận + duyệt bởi admin
-- báo cáo giải ngân
-- báo cáo khiếu nại và thông báo
+- Quản lý tài khoản + phân quyền
+- Onboarding tổ chức và quản trị
+- Tạo dự án và quản lý vòng đời dự án
+- Quản lý tham gia tình nguyện
+- Tiếp nhận quyên góp (bank webhook) và sao kê minh bạch
+- Phát hiện gian lận + duyệt bởi admin
+- Báo cáo giải ngân
+- Báo cáo khiếu nại và thông báo
 
 ## 2. Vai trò và quyền hạn
 - `VOLUNTEER`: xem dự án, quyên góp, tham gia dự án tình nguyện, gửi báo cáo vi phạm.
@@ -24,7 +24,7 @@ Năng lực cốt lõi:
 - Eventing: outbox pattern phát domain events tin cậy (`DONATION_MATCHED`, `PROJECT_APPROVED`, ...).
 - AI: model registry (`STAGING/ACTIVE/PREVIOUS/REJECTED`) và feature snapshot bất biến.
 
-## 4. Bộ trạng thái chuẩn (xuyên module)
+## 4. Bộ trạng thái chuẩn
 - `UserStatus`: `UNVERIFIED | ACTIVE | BLOCKED`
 - `OrgStatus`: `PENDING_REVIEW | APPROVED | REJECTED | SUSPENDED | EXPIRED`
 - `ProjectStatus`: `DRAFT | PENDING_REVIEW | APPROVED | REJECTED | ACTIVE | DISBURSEMENT_DUE | COMPLETED | SUSPENDED`
