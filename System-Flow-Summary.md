@@ -1,12 +1,12 @@
-# HỆ THỐNG KẾT NỐI TÌNH NGUYỆN & GÂY QUỸ CỘNG ĐỒNG — TÓM TẮT LUỒNG NGHIỆP VỤ WEB + AI
+# HỆ THỐNG KẾT NỐI TÌNH NGUYỆN VIÊN VỚI DỰ ÁN CỘNG ĐỒNG – TÍCH HỢP AI PHÁT HIỆN GIAO DỊCH QUYÊN GÓP BẤT THƯỜNG
 
 ## 1. Tổng quan
 
 Hệ thống hỗ trợ tổ chức cộng đồng vận hành dự án gây quỹ theo hướng:
 
-- Minh bạch dòng tiền,
-- Công khai tiến trình dự án,
-- Kiểm soát rủi ro giao dịch bằng AI kết hợp kiểm duyệt thủ công.
+- Minh bạch dòng tiền
+- Công khai tiến trình dự án
+- Kiểm soát rủi ro giao dịch bằng AI kết hợp kiểm duyệt thủ công
 
 Vai trò chính:
 
@@ -34,10 +34,10 @@ flowchart TD
   M[Công khai khoản chi và kết quả]
   N[Admin xác nhận hoàn tất]
 
-  O[AI chấm điểm rủi ro]
+  O[AI phân tích giao dịch bất thường]
   P[Admin rà soát cảnh báo]
   Q[Gắn nhãn kết luận]
-  R[Huấn luyện lại mô hình AI offline]
+  R[Retrain mô hình AI]
 
   A --> B --> C --> D --> E --> F --> G --> H --> I --> J
   J -- Chưa --> G
@@ -46,7 +46,6 @@ flowchart TD
   I --> O --> P --> Q
   Q --> I
   Q --> R
-  R --> O
 ```
 
 ## 3. Nghiệp vụ Web chi tiết
@@ -59,19 +58,19 @@ flowchart TD
 
 ## 3.2 Duyệt tổ chức và duyệt dự án
 
-- Tổ chức nộp hồ sơ pháp lý + thông tin nhận tiền.
-- Admin duyệt hồ sơ trước khi cho phép tạo dự án.
-- Dự án chỉ hoạt động công khai sau khi qua bước duyệt dự án.
+- Tổ chức nộp hồ sơ pháp lý + thông tin nhận tiền
+- Admin duyệt hồ sơ trước khi cho phép tạo dự án
+- Dự án chỉ hoạt động công khai sau khi qua bước duyệt dự án
 
 
 ## 3.3 Công khai lịch sử chỉnh sửa dự án
 
 Lịch sử chỉnh sửa dự án được công khai cho mọi người dùng, gồm:
 
-- Thời điểm chỉnh sửa,
-- Nội dung trước/sau chỉnh sửa,
-- Người thực hiện chỉnh sửa,
-- Lý do chỉnh sửa (nếu có).
+- Thời điểm chỉnh sửa
+- Nội dung trước/sau chỉnh sửa
+- Người thực hiện chỉnh sửa
+- Lý do chỉnh sửa (nếu có)
 
 Mục đích: tránh thay đổi âm thầm và tăng tính minh bạch.
 
