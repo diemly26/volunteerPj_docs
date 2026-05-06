@@ -1,4 +1,6 @@
 flowchart LR
-  DomainEvent --> NotificationService
-  NotificationService --> InApp
-  NotificationService --> Email
+  Events[Domain Events] --> NotiSvc[Notification Service]
+  NotiSvc --> InApp[Thông báo In-App]
+  NotiSvc --> EmailQ[Hàng đợi Email]
+  EmailQ --> Provider[Nhà cung cấp Email]
+  NotiSvc --> Pref[Tùy chọn người dùng]

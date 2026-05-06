@@ -1,5 +1,8 @@
 flowchart LR
-  Volunteer -->|Join request| Participation
-  Participation -->|Pending list| Manager
-  Manager -->|Approve/Reject| Participation
-  Manager -->|Assign role| Participation
+  Volunteer[Tình nguyện viên] --> Request[Tạo join request]
+  Request --> Pending[PENDING]
+  Pending -->|Duyệt| Member[THÀNH VIÊN ACTIVE]
+  Pending -->|Từ chối| Rejected[REJECTED]
+  Pending -->|Rút yêu cầu| Withdrawn[WITHDRAWN]
+  Manager --> Role[Gán SUB_MANAGER]
+  Role --> Member

@@ -1,6 +1,9 @@
 flowchart TB
-  User -->|Create session| DonationService
-  DonationService --> VietQR
-  Bank --> SePay --> Webhook
-  Webhook -->|HMAC + Idempotency| TransactionService
-  TransactionService --> FraudAI
+  User[Người dùng] --> Session[Tạo donation session]
+  Session --> QR[Tạo QR qua VietQR]
+  Bank[Ngân hàng] --> Webhook[Payment webhook]
+  Webhook --> Verify[Kiểm tra chữ ký + replay]
+  Verify --> Idempotency[Kiểm tra idempotency]
+  Idempotency --> Match[Đối soát session]
+  Match --> Tx[Lưu transaction]
+  Tx --> Queue[Fraud scoring bất đồng bộ]

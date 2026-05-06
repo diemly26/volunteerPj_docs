@@ -1,5 +1,8 @@
 flowchart TB
-  Manager -->|Submit profile| OrgService
-  OrgService -->|Pending queue| Admin
-  Admin -->|Approve/Reject| OrgService
-  Admin -->|Trusted label| OrgService
+  Applicant[Người nộp hồ sơ đã xác thực] --> Submit[Nộp hồ sơ tổ chức]
+  Submit --> Pending[PENDING_REVIEW]
+  Pending -->|Duyệt| Approved[APPROVED]
+  Pending -->|Từ chối| Rejected[REJECTED]
+  Pending -->|Quá SLA| Expired[EXPIRED]
+  Admin --> Trusted[Thiết lập is_trusted]
+  Trusted --> Approved

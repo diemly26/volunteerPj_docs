@@ -1,56 +1,21 @@
-# Module 10: Reporting & Complaints — Báo cáo vi phạm
+# Module 10: Báo cáo & Khiếu nại
 
-## 1. User Stories
+## Phạm vi
+Người dùng báo cáo vi phạm/sự cố trên dự án, giao dịch, bài cập nhật; admin tiếp nhận và xử lý.
 
-| ID | Role | Story |
-|----|------|-------|
-| US-01 | User | Tôi muốn báo cáo dự án có dấu hiệu gian lận. |
-| US-02 | User | Tôi muốn báo cáo giao dịch đáng ngờ trên sao kê. |
-| US-03 | Admin | Tôi muốn xử lý báo cáo và phản hồi kết quả. |
+## Core entities
+- `reports(...)`
+- `report_actions(...)`
 
-## 2. Business Logic
+## Business flow
+1. User đã xác thực tạo report `OPEN`.
+2. Worker triage gán ưu tiên `LOW/MEDIUM/HIGH`.
+3. Admin chuyển `IN_REVIEW`.
+4. Kết luận `RESOLVED` hoặc `DISMISSED`.
+5. Gửi thông báo kết quả cho reporter.
 
-### 2.1 Tạo báo cáo
-- User chọn loại báo cáo: `PROJECT`, `TRANSACTION`, `UPDATE`.
-- Lưu `report` với mô tả và reference id.
-
-### 2.2 Xử lý báo cáo
-- Admin review: confirm hoặc dismiss.
-- Kết quả gửi thông báo cho user đã báo cáo.
-
-## 3. Validations & Constraints
-
-| Field | Ràng buộc |
-|-------|-----------|
-| description | 20–2000 ký tự |
-| oneActive | 1 user chỉ có 1 report open cho cùng reference |
-
-## 4. API Endpoints
-
-| Method | Endpoint | Service Function | Mô tả | Auth | Input | Response DTO |
-|--------|----------|-----------------|-------|------|-------|-------------|
-| POST | `/api/reports` | `ReportService.create()` | Tạo báo cáo | Yes | `{ type, referenceId, description }` | `ReportDto` |
-| GET | `/api/admin/reports` | `ReportService.getAll()` | DS báo cáo | Yes (Admin) | Query: `status, page, limit` | `PaginatedReportDto` |
-| POST | `/api/admin/reports/:id/resolve` | `ReportService.resolve()` | Xử lý báo cáo | Yes (Admin) | `{ action, note }` | `ReportDto` |
-
-### Response DTO Definitions
-
-**ReportDto**
-```json
-{
-  "id": "Long",
-  "type": "PROJECT | TRANSACTION | UPDATE",
-  "referenceId": "Long",
-  "description": "string",
-  "status": "OPEN | RESOLVED",
-  "createdAt": "DateTime"
-}
-```
-
-**PaginatedReportDto**
-```json
-{
-  "reports": "ReportDto[]",
-  "total": "number"
-}
-```
+## API
+- `POST /api/reports`
+- `GET /api/admin/reports?status=&priority=`
+- `POST /api/admin/reports/{id}/start-review`
+- `POST /api/admin/reports/{id}/resolve`

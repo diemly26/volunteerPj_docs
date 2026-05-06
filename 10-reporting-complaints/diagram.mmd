@@ -1,4 +1,8 @@
 flowchart LR
-  User -->|Report| ReportService
-  ReportService --> Admin
-  Admin -->|Resolve| ReportService
+  User[Người dùng] --> CreateReport[Tạo report]
+  CreateReport --> Queue[Hàng đợi OPEN]
+  Queue --> Review[IN_REVIEW]
+  Review --> Resolved[RESOLVED]
+  Review --> Dismissed[DISMISSED]
+  Resolved --> Notify[Thông báo kết quả]
+  Dismissed --> Notify

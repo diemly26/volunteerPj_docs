@@ -1,58 +1,22 @@
-# Module 12: Admin Governance — Quản trị & Kiểm soát
+# Module 12: Quản trị & Governance
 
-## 1. User Stories
+## Phạm vi
+Hàng đợi vận hành admin, chế tài người dùng, thay đổi cấu hình/chính sách và toàn vẹn audit.
 
-| ID | Role | Story |
-|----|------|-------|
-| US-01 | Admin | Tôi muốn quản lý queue dự án và báo cáo giải ngân. |
-| US-02 | Admin | Tôi muốn quản lý tổ chức tin cậy và block user. |
-| US-03 | Admin | Tôi muốn xem audit log của cấu hình AI. |
+## Core entities
+- `admin_queue_snapshots(...)`
+- `user_sanctions(...)`
+- `system_config(...)`
+- `audit_logs(...)`
 
-## 2. Business Logic
+## Governance flows
+Dashboard admin tổng hợp hàng đợi xử lý.  
+Block/unblock user phải tạo sanction record, không overwrite âm thầm.  
+Đổi cấu hình nhạy cảm (fraud thresholds, trust policy) bắt buộc có lý do và audit.
 
-### 2.1 Hàng đợi quản trị
-- Project approval queue.
-- Disbursement review queue.
-- Flagged transactions queue.
-
-### 2.2 Block user
-- Block → user không đăng nhập được, hiển thị lý do.
-
-### 2.3 AI config audit
-- Thay đổi config ghi log đầy đủ.
-
-## 3. Validations & Constraints
-
-| Field | Ràng buộc |
-|-------|-----------|
-| auditLog | Immutable, retention 2 năm |
-| access | Chỉ Admin |
-
-## 4. API Endpoints
-
-| Method | Endpoint | Service Function | Mô tả | Auth | Input | Response DTO |
-|--------|----------|-----------------|-------|------|-------|-------------|
-| GET | `/api/admin/queues` | `AdminQueueService.getAll()` | Tổng hợp queue | Yes (Admin) | — | `AdminQueueDto` |
-| PUT | `/api/admin/users/:id/block` | `AdminService.blockUser()` | Block user | Yes (Admin) | `{ reason }` | `UserDto` |
-| PUT | `/api/admin/users/:id/unblock` | `AdminService.unblockUser()` | Unblock user | Yes (Admin) | — | `UserDto` |
-| GET | `/api/admin/audit-logs` | `AuditLogService.getAll()` | Audit log | Yes (Admin) | Query: `page, limit, action?` | `PaginatedAuditLogDto` |
-
-### Response DTO Definitions
-
-**AdminQueueDto**
-```json
-{
-  "pendingProjects": "number",
-  "pendingDisbursements": "number",
-  "flaggedTransactions": "number",
-  "openReports": "number"
-}
-```
-
-**PaginatedAuditLogDto**
-```json
-{
-  "logs": "AuditLogDto[]",
-  "total": "number"
-}
-```
+## API
+- `GET /api/admin/queues`
+- `PUT /api/admin/users/{id}/block`
+- `PUT /api/admin/users/{id}/unblock`
+- `GET /api/admin/audit-logs`
+- `PUT /api/admin/config/{key}`

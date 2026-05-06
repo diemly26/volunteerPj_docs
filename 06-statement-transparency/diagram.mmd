@@ -1,5 +1,6 @@
 flowchart LR
-  TransactionService --> Statement
-  Statement --> PublicPage
-  Admin -->|Confirm fraud| Statement
-  Manager -->|Export| Statement
+  Transactions[Giao dịch] --> Projection[Statement Projection]
+  Projection --> Public[API sao kê công khai]
+  Projection --> Export[Export cho manager]
+  Admin --> FraudDecision[Quyết định gian lận]
+  FraudDecision --> Projection

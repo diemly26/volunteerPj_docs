@@ -1,5 +1,10 @@
-flowchart TB
-  Project -->|End donate| Disbursement
-  Manager -->|Submit report| Disbursement
-  Admin -->|Approve/Reject| Disbursement
-  Disbursement --> Updates
+stateDiagram-v2
+  [*] --> DUE
+  DUE --> DRAFT
+  DRAFT --> SUBMITTED
+  SUBMITTED --> APPROVED
+  SUBMITTED --> REJECTED
+  DUE --> OVERDUE
+  OVERDUE --> EXTENDED
+  EXTENDED --> VIOLATED
+  APPROVED --> [*]

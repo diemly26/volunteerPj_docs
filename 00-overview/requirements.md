@@ -1,34 +1,43 @@
-# Module 00: Overview — Tổng quan hệ thống
+# Module 00: Tổng quan hệ thống (Mốc triển khai)
 
-## 1. Mục tiêu
-- Kết nối tổ chức cộng đồng với tình nguyện viên và người quyên góp.
-- Đảm bảo minh bạch qua sao kê real-time, progress updates, và báo cáo giải ngân bắt buộc.
-- Tích hợp AI phát hiện giao dịch bất thường theo kiến trúc Hybrid 2 tầng.
+## 1. Phạm vi sản phẩm
+Nền tảng kết nối người quyên góp/tình nguyện viên với các tổ chức cộng đồng.
 
-## 2. Vai trò hệ thống
-| Role | Mô tả | Quyền chính |
-|------|-------|------------|
-| Volunteer | Người tham gia dự án và quyên góp | Tìm dự án, tham gia, donate, theo dõi tiến độ, báo cáo vi phạm |
-| Manager | Đại diện tổ chức | Tạo dự án, quản lý thành viên, đăng progress, nộp giải ngân |
-| Admin | Quản trị hệ thống | Duyệt dự án, duyệt giải ngân, xử lý gian lận, quản lý AI |
+Năng lực cốt lõi:
+- quản lý tài khoản + phân quyền
+- onboarding tổ chức và quản trị
+- tạo dự án và quản lý vòng đời dự án
+- quản lý tham gia tình nguyện
+- tiếp nhận quyên góp (bank webhook) và sao kê minh bạch
+- phát hiện gian lận + duyệt bởi admin
+- báo cáo giải ngân
+- báo cáo khiếu nại và thông báo
 
-## 3. Ràng buộc cốt lõi
-- Donate bắt buộc đăng nhập để map giao dịch về `user_id`.
-- Dự án chỉ duyệt 1 lần khi tạo; các lần chỉnh sửa ghi log và notify Admin.
-- Feature snapshot bất biến, không update sau insert.
-- Isolation Forest không dùng nhãn Admin; Fraud Classifier mới dùng nhãn.
-- Webhook SePay bắt buộc HMAC + idempotency.
+## 2. Vai trò và quyền hạn
+- `VOLUNTEER`: xem dự án, quyên góp, tham gia dự án tình nguyện, gửi báo cáo vi phạm.
+- `MANAGER`: quản lý tổ chức đã duyệt, quản lý dự án/thành viên/cập nhật/giải ngân.
+- `ADMIN`: duyệt tổ chức/dự án/giải ngân, xử lý hàng đợi gian lận, thực hiện governance.
 
-## 4. Phân rã domain
-- Identity & Access
-- Organization Onboarding
-- Project Lifecycle
-- Participation
-- Donations & Payments
-- Statement Transparency
-- Progress Updates
-- Disbursement
-- Fraud AI
-- Reporting & Complaints
-- Notifications
-- Admin Governance
+## 3. Kiến trúc tổng thể
+- Backend: REST API + async workers (xử lý webhook, suy luận gian lận, gửi thông báo).
+- Database: relational DB (MySQL/Postgres) với FK + unique constraints.
+- Eventing: outbox pattern phát domain events tin cậy (`DONATION_MATCHED`, `PROJECT_APPROVED`, ...).
+- AI: model registry (`STAGING/ACTIVE/PREVIOUS/REJECTED`) và feature snapshot bất biến.
+
+## 4. Bộ trạng thái chuẩn (xuyên module)
+- `UserStatus`: `UNVERIFIED | ACTIVE | BLOCKED`
+- `OrgStatus`: `PENDING_REVIEW | APPROVED | REJECTED | SUSPENDED | EXPIRED`
+- `ProjectStatus`: `DRAFT | PENDING_REVIEW | APPROVED | REJECTED | ACTIVE | DISBURSEMENT_DUE | COMPLETED | SUSPENDED`
+- `DonationSessionStatus`: `PENDING | MATCHED | EXPIRED | UNMATCHED | CANCELLED`
+- `TransactionStatus`: `RECEIVED | NORMAL | SUSPICIOUS | CONFIRMED_FRAUD | REVERSED`
+- `DisbursementStatus`: `NOT_REQUIRED | DUE | DRAFT | SUBMITTED | APPROVED | REJECTED | OVERDUE | VIOLATED`
+- `ReportStatus`: `OPEN | IN_REVIEW | RESOLVED | DISMISSED`
+
+## 5. Quy tắc cross-cutting
+- Lưu thời gian UTC trong DB; client tự convert timezone.
+- Phân trang phải khai báo rõ offset/cursor; mặc định limit 20, tối đa 100.
+- Mutation APIs trả error code xác định và field validation rõ ràng.
+- Webhook bắt buộc replay protection: `signature + timestamp + nonce`.
+- Idempotency bắt buộc cho callback bên ngoài và thao tác duyệt/từ chối của admin.
+- Hành động đặc quyền bắt buộc ghi immutable `audit_log`.
+- Tiền tệ lưu theo đơn vị nhỏ nhất (`amount_minor`) + `currency`.

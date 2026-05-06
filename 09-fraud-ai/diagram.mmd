@@ -1,7 +1,11 @@
 flowchart TB
-  TransactionService --> Features[Feature Snapshot]
-  Features --> Isolation[Isolation Forest]
-  Isolation --> Decision
-  Decision -->|SUSPICIOUS| FlaggedQueue
-  Admin -->|Review| Labeling
-  Labeling --> FraudModel[Fraud Classifier]
+  Tx[Transaction] --> Feat[Feature Snapshot bất biến]
+  Feat --> IF[Isolation Forest]
+  Feat --> CLS[Fraud Classifier]
+  IF --> Ensemble[Ensemble]
+  CLS --> Ensemble
+  Ensemble --> Decision[NORMAL / SUSPICIOUS]
+  Decision --> Queue[Hàng đợi admin review]
+  Admin --> Label[Gắn nhãn có version]
+  Label --> Train[Huấn luyện lại offline]
+  Train --> Registry[Model Registry]

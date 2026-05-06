@@ -1,5 +1,7 @@
 flowchart TB
-  Admin --> Queues
-  Admin --> UserMgmt
-  Admin --> AuditLog
-  Admin --> AIConfig
+  Admin --> Queues[Hàng đợi vận hành]
+  Admin --> Sanctions[Chế tài người dùng]
+  Admin --> Config[Cấu hình hệ thống]
+  Admin --> Audit[Audit Logs]
+  Config --> Audit
+  Sanctions --> Audit

@@ -1,6 +1,9 @@
 flowchart LR
-  Guest -->|Register| Auth
-  Guest -->|Login| Auth
-  Auth --> OTP[OTP Verification]
-  Auth --> Tokens[JWT Access/Refresh]
-  Tokens --> API[Protected APIs]
+  User[Người dùng] --> Register[Đăng ký]
+  Register --> OTP[OTP]
+  OTP --> Verify[Xác minh email]
+  Verify --> Active[Tài khoản ACTIVE]
+  Active --> Login[Đăng nhập]
+  Login --> Access[Access Token]
+  Login --> Refresh[Refresh Token]
+  Refresh --> Rotate[Token Rotation]

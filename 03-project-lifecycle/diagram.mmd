@@ -1,7 +1,9 @@
-flowchart LR
-  Manager -->|Create| ProjectService
-  ProjectService -->|Pending| Admin
-  Admin -->|Approve/Reject| ProjectService
-  Manager -->|Edit| ProjectService
-  ProjectService --> History[Edit History]
-  ProjectService --> Public[Public Project Page]
+stateDiagram-v2
+  [*] --> DRAFT
+  DRAFT --> PENDING_REVIEW
+  PENDING_REVIEW --> APPROVED
+  PENDING_REVIEW --> REJECTED
+  APPROVED --> ACTIVE
+  ACTIVE --> DISBURSEMENT_DUE
+  DISBURSEMENT_DUE --> COMPLETED
+  ACTIVE --> SUSPENDED

@@ -1,57 +1,22 @@
-# Module 06: Statement Transparency — Sao kê công khai
+# Module 06: Minh bạch sao kê
 
-## 1. User Stories
+## Phạm vi
+Sao kê công khai, quy tắc hiển thị theo trạng thái gian lận và export.
 
-| ID | Role | Story |
-|----|------|-------|
-| US-01 | User | Tôi muốn xem sao kê công khai theo thời gian thực. |
-| US-02 | Manager | Tôi muốn xuất file sao kê để báo cáo. |
-| US-03 | Admin | Tôi muốn ẩn giao dịch gian lận khỏi sao kê. |
+## Chính sách hiển thị
+- Hiển thị: `NORMAL`, `SUSPICIOUS`.
+- Ẩn: `CONFIRMED_FRAUD`, `REVERSED`.
 
-## 2. Business Logic
+## Core entities
+- `statement_views`
+- `statement_exports(...)`
 
-### 2.1 Sao kê công khai
-- Hiển thị: tên người gửi, số tiền, thời gian, nội dung chuyển khoản.
-- Giao dịch `SUSPICIOUS` hiển thị cờ cảnh báo.
+## Quy tắc
+- Sao kê near-real-time.
+- Tên người gửi theo alias/mask.
+- Export chỉ cho manager/admin.
+- Giới hạn 20.000 dòng/lần.
 
-### 2.2 Xử lý gian lận
-- Khi Admin xác nhận gian lận → `is_on_statement=false`.
-
-### 2.3 Xuất file
-- Manager xuất CSV/Excel theo dự án.
-
-## 3. Validations & Constraints
-
-| Field | Ràng buộc |
-|-------|-----------|
-| export | Tối đa 20,000 dòng/lần |
-| public | Không hiển thị giao dịch `ABNORMAL` |
-
-## 4. API Endpoints
-
-| Method | Endpoint | Service Function | Mô tả | Auth | Input | Response DTO |
-|--------|----------|-----------------|-------|------|-------|-------------|
-| GET | `/api/projects/:id/statement` | `StatementService.getPublicStatement()` | Sao kê công khai | No | Query: `page, limit` | `PaginatedStatementDto` |
-| GET | `/api/projects/:id/statement/export` | `StatementService.export()` | Xuất sao kê | Yes (Manager) | Query: `format=csv|xlsx` | Binary |
-
-### Response DTO Definitions
-
-**StatementItemDto**
-```json
-{
-  "id": "Long",
-  "senderName": "string",
-  "amount": "number",
-  "transferContent": "string",
-  "createdAt": "DateTime",
-  "status": "NORMAL | SUSPICIOUS"
-}
-```
-
-**PaginatedStatementDto**
-```json
-{
-  "items": "StatementItemDto[]",
-  "total": "number"
-}
-```
+## API
+- `GET /api/projects/{id}/statement`
+- `GET /api/projects/{id}/statement/export?format=csv|xlsx`
