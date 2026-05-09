@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant U as User
+    participant C as OrgController
+    participant S as OrgService
+    participant R as OrgRepository
+
+    U->>C: POST /api/v1/organizations
+    C->>S: createOrganization(request)
+    S->>S: verify users.status=ACTIVE
+    S->>R: insert organizations(status=PENDING_REVIEW)
+    R-->>S: organization
+    S-->>C: response DTO
+    C-->>U: envelope(success,data,error)

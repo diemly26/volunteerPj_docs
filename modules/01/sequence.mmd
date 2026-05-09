@@ -1,0 +1,13 @@
+sequenceDiagram
+    participant C as Client
+    participant A as AuthController
+    participant S as AuthService
+    participant R as UserRepository
+
+    C->>A: POST /api/v1/auth/login
+    A->>S: login(request)
+    S->>R: findByEmail(email)
+    R-->>S: user
+    S->>S: verify password + users.status
+    S-->>A: tokens
+    A-->>C: envelope(success,data,error)

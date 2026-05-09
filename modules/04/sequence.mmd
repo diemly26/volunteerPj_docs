@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant V as Volunteer
+    participant C as ParticipationController
+    participant S as ParticipationService
+    participant R as ParticipationRepository
+
+    V->>C: POST /api/v1/projects/{id}/join-requests
+    C->>S: createJoinRequest(projectId,userId)
+    S->>R: check project active + duplicate pending
+    R-->>S: valid
+    S->>R: insert request(status=PENDING)
+    R-->>S: created
+    S-->>C: response DTO
+    C-->>V: envelope(success,data,error)

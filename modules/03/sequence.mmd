@@ -1,0 +1,11 @@
+sequenceDiagram
+    participant Job as ProjectLifecycleAsyncService
+    participant S as ProjectService
+    participant R as ProjectRepository
+
+    Job->>S: evaluateFundingStop(projectId)
+    S->>R: read project + totals
+    R-->>S: status and totals
+    S->>S: check target reached OR end_at passed
+    S->>R: update status=DISBURSEMENT_DUE
+    R-->>S: updated
