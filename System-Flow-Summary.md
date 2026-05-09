@@ -164,26 +164,44 @@ AI không thay thế kết luận của con người.
 
 ## 6. Khi nào giao dịch được coi là bất thường?
 
-### Nhóm 1: Bất thường về giá trị giao dịch
+### Nhóm 1: Bất thường về giá trị giao dịch  
+*(Behavioral Amount Anomaly)*
 
-(Behavioral Amount Anomaly)
+- Giá trị giao dịch khác biệt đáng kể so với hành vi donate thông thường trước đây của người dùng.
 
-- Số tiền donate cao đột biến so với lịch sử đóng góp trước đây của chính người dùng đó.
-- Giá trị giao dịch vượt quá mạnh so với mức donate trung bình và độ ổn định hành vi thông thường của user.
-- Người dùng có lịch sử donate ổn định nhưng đột nhiên thay đổi mạnh về mức tiền giao dịch.
+Ví dụ:
+- Trước đây thường donate số tiền nhỏ và ổn định nhưng đột nhiên phát sinh giao dịch có giá trị cao bất thường.
 
-### Nhóm 2: Bất thường về tần suất và thời điểm giao dịch
+---
 
-(Velocity & Time-based Anomaly)
+### Nhóm 2: Bất thường về tần suất và thời điểm giao dịch  
+*(Velocity & Time-based Anomaly)*
 
 - Một người dùng thực hiện quá nhiều giao dịch trong khoảng thời gian ngắn.
-- Xuất hiện nhiều giao dịch liên tiếp với nhịp độ bất thường.
 - Giao dịch phát sinh vào khung giờ hiếm gặp hoặc khác đáng kể so với hành vi donate thông thường.
 
-### Nhóm 3: Bất thường theo pattern phối hợp
+Ví dụ:
+- Spam nhiều giao dịch liên tiếp trong vài phút
+- Donate liên tục vào khung giờ khuya hoặc rạng sáng.
 
-(Coordinated Transaction Pattern)
+---
+
+### Nhóm 3: Bất thường theo pattern phối hợp  
+*(Coordinated Transaction Pattern)*
 
 - Nhiều giao dịch có cùng mức tiền xuất hiện liên tục trong thời gian ngắn.
 - Nhiều user khác nhau cùng thực hiện giao dịch với số tiền giống hệt nhau trong cùng khoảng thời gian.
-- Xuất hiện cụm giao dịch lặp lại theo pattern giống nhau giữa nhiều tài khoản.
+
+Ví dụ:
+- Nhiều tài khoản khác nhau cùng donate một mức tiền lặp lại theo cụm thời gian ngắn.
+
+---
+
+### Nhóm 4: Bất thường về IP và thiết bị  
+*(IP & Device Behavior Anomaly)*
+
+- Một người dùng sử dụng nhiều IP khác nhau trong thời gian ngắn.
+- Một người dùng thay đổi thiết bị liên tục trong khoảng thời gian ngắn.
+
+Ví dụ:
+- Cùng tài khoản nhưng phát sinh giao dịch từ nhiều IP hoặc nhiều thiết bị khác nhau trong thời gian ngắn.
